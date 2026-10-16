@@ -1,5 +1,839 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#145b43"><title>MALI MODE — youth business growth platform</title><link rel="stylesheet" href="/static/app.css"></head><body><header class="top"><div class="brand"><span class="mark">K</span> Kasi<span>Link</span></div><div class="top-actions"><span id="session-label" class="muted">Business support for real life</span><button id="logout" class="btn secondary hidden" type="button">Sign out</button></div></header><main class="wrap"><section id="auth-view" class="auth-grid"><div class="intro"><p class="eyebrow">YOUR BUSINESS. YOUR NEXT STEP.</p><h1>From informal trading to a business ready for bigger opportunities.</h1><p>MALI MODE helps small businesses keep records, understand their numbers, prepare documents and work towards formal markets.</p><ul><li>Simple business records and reports</li><li>Guided business plan for new entrepreneurs</li><li>Supplier and delivery support</li><li>Tender readiness and formalisation checklist</li></ul><p class="notice">Create an account using your own details. Email verification must be configured before public launch.</p></div><div class="panel"><div class="tabs"><button class="tab active" data-tab="signin">Sign in</button><button class="tab" data-tab="signup">Create account</button></div><form id="signin-form" class="form"><h2>Welcome back</h2><label>Email address<input name="email" type="email" autocomplete="email" required></label><label>Password<input name="password" type="password" autocomplete="current-password" required></label><button class="btn" type="submit">Sign in</button><p class="small muted">New to MALI MODE? Create an account and verify your email first.</p></form><form id="signup-form" class="form hidden"><h2>Create your account</h2><label>Full name<input name="full_name" required minlength="2" autocomplete="name"></label><label>Email address<input name="email" type="email" required autocomplete="email"></label><label>Mobile number<input name="phone" type="tel" required minlength="7" autocomplete="tel" placeholder="e.g. 07x xxx xxxx"></label><label>Which account do you need?<select name="role" required><option value="business_owner">I already run a business</option><option value="new_entrepreneur">I want to start a business</option><option value="supplier">I supply products to businesses</option><option value="delivery_partner">I deliver orders</option></select></label><label>Password<input name="password" type="password" required minlength="10" autocomplete="new-password" placeholder="At least 10 characters, letters and numbers"></label><p class="small muted">Email verification is required before signing in. Each role has a different profile and dashboard.</p><button class="btn" type="submit">Create account</button></form><div class="panel dev-preview" id="dev-preview-panel"><p class="eyebrow">DEVELOPER PREVIEW · NO DATABASE LOGIN</p><h3>Preview a dashboard while building the frontend</h3><p class="small muted">Choose one role here to preview its dashboard without creating an account. This preview is temporary and does not save data. It is a development tool, not real sign-in.</p><label>Dashboard to preview<select id="preview-role"><option value="business_owner">Business owner</option><option value="new_entrepreneur">New entrepreneur</option><option value="supplier">Supplier</option><option value="delivery_partner">Delivery partner</option></select></label><button class="btn secondary" id="open-preview" type="button">Open selected preview</button></div><div id="auth-message" class="message hidden" role="status"></div></div></section>
-<section id="verification-view" class="panel narrow hidden"><p class="eyebrow">ONE MORE STEP</p><h1>Verify your email</h1><p id="verify-copy">We have created your account. Open the verification link sent to your email, then return here to sign in.</p><div class="notice">If this is a local setup without SMTP, the verification link is printed in the server terminal. That is for development only; configure an email provider before public use.</div><button id="back-signin" class="btn secondary" type="button">Back to sign in</button></section>
-<section id="profile-view" class="hidden"><div class="section-head"><div><p class="eyebrow" id="profile-eyebrow">PROFILE SETUP</p><h1 id="profile-title">Complete your profile</h1><p id="profile-subtitle">These details help MALI MODE tailor the right tools to you.</p></div><span class="step-pill" id="step-pill">Profile required</span></div><div class="panel"><div id="entrepreneur-intro" class="notice hidden"><strong>Your dashboard is locked until this step is complete.</strong> Answer the questions below so MALI MODE can prepare a useful business plan based on your real situation. You can review and correct the plan before using it.</div><form id="profile-form" class="form-grid"><label>Full name<input name="full_name" required></label><label>Mobile number<input name="phone" required></label><label>Township / town / operating area<input name="location" required placeholder="e.g. Roodepoort, Johannesburg"></label><label>Business or proposed business name<input name="business_name" required></label><label>Business type / sector<input name="business_type" required placeholder="e.g. food, clothing, repairs"></label><label class="wide">What will you sell or what service will you provide?<textarea name="product_service" required rows="2"></textarea></label><label class="wide entrepreneur-only">Who are your target customers?<textarea name="target_customers" required rows="2" placeholder="Be specific: nearby households, salons, spaza shops..."></textarea></label><label class="wide entrepreneur-only">What customer need or problem will you solve?<textarea name="customer_problem" required rows="2"></textarea></label><label class="entrepreneur-only">Starting budget (rand)<input name="starting_budget" type="number" min="0" step="0.01" required></label><label class="entrepreneur-only">Planned selling price per unit (rand)<input name="selling_price" type="number" min="0" step="0.01" required></label><label class="entrepreneur-only">Cost to make/buy one unit (rand)<input name="unit_cost" type="number" min="0" step="0.01" required></label><label class="entrepreneur-only">Expected units sold per month<input name="expected_units_month" type="number" min="0" step="1" required></label><label class="entrepreneur-only">Monthly fixed costs (rand)<input name="monthly_fixed_costs" type="number" min="0" step="0.01" required></label><label class="entrepreneur-only">Funding you may need (rand)<input name="funding_needed" type="number" min="0" step="0.01" required></label><label class="wide entrepreneur-only">How will you reach customers?<textarea name="marketing_plan" required rows="2" placeholder="WhatsApp, local foot traffic, referrals, markets..."></textarea></label><label class="wide entrepreneur-only">How will you operate and get supplies?<textarea name="operations" required rows="2"></textarea></label><label class="wide entrepreneur-only">What experience or skills do you already have?<textarea name="experience" required rows="2"></textarea></label><label class="entrepreneur-only">Registration status<select name="registration_status" required><option value="Not registered">Not registered</option><option value="In process">Registration in progress</option><option value="Registered">Already registered</option><option value="Not sure what is required">Not sure what is required</option></select></label><label class="wide entrepreneur-only">Risks or challenges you expect<textarea name="risks" required rows="2"></textarea></label><label class="wide role-details-label hidden">Account-specific details<textarea name="role_details" rows="3" placeholder="Supplier: product range, pricing and delivery area. Delivery partner: transport type, service area and availability. Existing business: what you sell and how long you have traded."></textarea></label><div class="wide form-actions"><button class="btn" type="submit" id="save-profile">Save profile and continue</button><p class="small muted">Your answers are stored in the MALI MODE database. Do not enter passwords, bank PINs or other secrets.</p></div></form></div></section>
-<section id="plan-view" class="hidden"><div class="section-head"><div><p class="eyebrow">YOUR BUSINESS PLAN</p><h1>Review your plan before opening the dashboard</h1><p>Generated from your profile and financial assumptions.</p></div><span class="step-pill">Review required</span></div><div id="plan-content" class="panel"></div><div class="button-row"><button id="download-plan" class="btn" type="button">Download business plan PDF</button><button id="unlock-dashboard" class="btn secondary" type="button">I've reviewed it — open my dashboard</button></div><p class="small muted">This plan is a working document, not an audited forecast or guarantee of funding. Verify all numbers and tender requirements before sending it.</p></section>
-<section id="dashboard-view" class="hidden"><div class="section-head"><div><p class="eyebrow">YOUR MALI MODE WORKSPACE</p><h1 id="dashboard-title">Dashboard</h1><p id="dashboard-subtitle">Your role-specific tools.</p></div><span class="step-pill" id="dashboard-role"></span></div><div id="dashboard-cards" class="dash-grid"></div><div id="transaction-workspace" class="panel hidden"><h2>Record business activity</h2><p class="muted">Type or speak naturally. You can also scan a paper record or import a spreadsheet. Check every extracted detail before saving.</p><div class="tabs tx-tabs"><button class="tab active" data-tx-tab="quick">Type or speak</button><button class="tab" data-tx-tab="scan">Scan a paper record</button><button class="tab" data-tx-tab="csv">Import a CSV</button></div><div id="tx-quick" class="tx-pane"><label>Describe what happened<textarea id="tx-natural-text" rows="3" placeholder="I sold 5 bags of spinach for R150 cash yesterday."></textarea></label><div class="button-row tx-actions"><button id="tx-voice" class="btn secondary" type="button">🎙 Speak instead</button><button id="tx-parse" class="btn" type="button">Turn into transaction</button></div><p id="tx-voice-status" class="small muted">Voice uses your browser's speech recognition if available.</p></div><div id="tx-scan" class="tx-pane hidden"><p>Take a clear photo of a notebook page or receipt. The app extracts text so you do not have to retype everything.</p><label>Choose a photo<input id="tx-scan-file" type="file" accept="image/png,image/jpeg,image/webp,image/tiff"></label><button id="tx-scan-btn" class="btn" type="button">Scan photo</button><p class="small muted">Printed text works best; handwriting and totals can be misread. Scanning does not save anything automatically.</p></div><div id="tx-csv" class="tx-pane hidden"><p>If you already have records in Excel or another app, export them as CSV and import them in one go.</p><label>Choose a CSV file<input id="tx-csv-file" type="file" accept=".csv,text/csv"></label><button id="tx-csv-btn" class="btn" type="button">Preview CSV import</button><p class="small muted">Useful columns: Date, Type, Description or Item, Amount, Category, Quantity, Payment Method.</p></div><div id="tx-message" class="message hidden" role="status"></div><div id="tx-draft-area" class="hidden"><h3>Review transaction</h3><p class="small muted">The app makes a best-effort guess. Correct all fields before saving.</p><form id="tx-review-form" class="form-grid"><label>Date<input name="transaction_date" type="date" required></label><label>Type<select name="transaction_type"><option>Sale</option><option>Purchase</option><option>Expense</option><option>Refund</option></select></label><label class="wide">Description<input name="description" required maxlength="240"></label><label>Category<select name="category"><option>Sales</option><option>Stock</option><option>Transport</option><option>Rent</option><option>Utilities</option><option>Wages</option><option>Other</option></select></label><label>Amount (R)<input name="amount" type="number" min="0.01" step="0.01" required></label><label>Quantity<input name="quantity" type="number" min="0.01" step="0.01" value="1" required></label><label>Payment method<select name="payment_method"><option>Cash</option><option>Card</option><option>Bank Transfer</option><option>E-wallet</option><option>Credit</option><option>Other</option></select></label><div class="wide"><button class="btn" type="submit">Confirm and save</button></div></form></div><div id="tx-import-preview" class="hidden"><h3>CSV import preview</h3><p id="tx-import-summary"></p><div id="tx-import-errors" class="small"></div><div id="tx-import-table" class="tx-history"></div><div class="button-row"><button id="tx-import-confirm" class="btn" type="button">Confirm import reviewed rows</button><button id="tx-import-cancel" class="btn secondary" type="button">Cancel</button></div></div><hr><div class="section-head"><div><h3>Saved transaction history</h3><p class="muted small">Only you can see the records saved to your account.</p></div><button id="tx-refresh" class="btn secondary" type="button">Refresh</button></div><div id="tx-summary" class="metric-row"></div><section class="insights-panel"><div class="section-head"><div><h3>Business intelligence & next steps</h3><p class="small muted">Calculated from your saved transaction history. More complete records produce more useful insights.</p></div><button id="insights-refresh" class="btn secondary" type="button">Refresh insights</button></div><div id="insights-summary" class="metric-row"></div><div id="insights-advice" class="insights-list"><div class="empty">Record or import transactions to generate insights.</div></div><p id="insights-method" class="small muted"></p></section><div id="tx-history" class="tx-history"></div></div><div class="panel"><h2>Your profile</h2><div id="profile-summary"></div><button id="edit-profile" class="btn secondary" type="button">Update profile</button></div><div id="plan-dashboard-card" class="panel hidden"><h2>Your business plan</h2><p>Your plan is ready to revisit or download.</p><button id="download-plan-dashboard" class="btn" type="button">Download plan PDF</button></div><div class="panel"><h2>Payments integration</h2><p><strong>Status: Not connected yet.</strong> MALI MODE does not currently process real payments. No payment gateway credentials or sandbox checkout are configured, so do not treat payments as operational.</p><p class="small muted">Before launch, choose a provider that supports your target market, implement its hosted checkout and verified webhook flow, and test in sandbox mode. Never store card numbers or CVVs in MALI MODE.</p></div><div class="panel"><h2>Formal markets and documentation</h2><p>Start with official sources and check each notice's eligibility, deadline and required documents.</p><div class="link-list"><a href="https://www.etenders.gov.za/Home/" target="_blank" rel="noopener">South African government eTenders ↗</a><a href="https://secure.csd.gov.za/" target="_blank" rel="noopener">Central Supplier Database (CSD) ↗</a><a href="https://www.seda.org.za/" target="_blank" rel="noopener">Small Enterprise Development Agency ↗</a></div><p class="small muted">These links are official starting points; MALI MODE does not yet automatically import live tender listings or submit applications.</p></div></section><div id="global-message" class="message hidden" role="status"></div></main><footer>© MALI MODE · Your hustle. Your next move.</footer><script src="/static/app.js" defer></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#145b43">
+    <title>MALI MODE — youth business growth platform</title>
+    <link href="app.css" rel="stylesheet">
+</head>
+<body>
+    <header class="top">
+        <div class="brand">
+            <span class="mark">K</span>
+            Kasi
+            <span>Link</span>
+        </div>
+
+        <div class="top-actions">
+            <span class="muted" id="session-label">
+                Business support for real life
+            </span>
+
+            <button class="btn secondary hidden" id="logout" type="button">
+                Sign out
+            </button>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <section class="auth-grid" id="auth-view">
+            <div class="intro">
+                <p class="eyebrow">YOUR BUSINESS. YOUR NEXT STEP.</p>
+
+                <h1>
+                    From informal trading to a business ready for bigger opportunities.
+                </h1>
+
+                <p>
+                    MALI MODE helps small businesses keep records, understand their numbers,
+                    prepare documents and work towards formal markets.
+                </p>
+
+                <ul>
+                    <li>Simple business records and reports</li>
+                    <li>Guided business plan for new entrepreneurs</li>
+                    <li>Supplier and delivery support</li>
+                    <li>Tender readiness and formalisation checklist</li>
+                </ul>
+
+                <p class="notice">
+                    Create an account using your own details. Email verification must be
+                    configured before public launch.
+                </p>
+            </div>
+
+            <div class="panel">
+                <div class="tabs">
+                    <button class="tab active" data-tab="signin">
+                        Sign in
+                    </button>
+
+                    <button class="tab" data-tab="signup">
+                        Create account
+                    </button>
+                </div>
+
+                <form class="form" id="signin-form">
+                    <h2>Welcome back</h2>
+
+                    <label>
+                        Email address
+                        <input
+                            autocomplete="email"
+                            name="email"
+                            required
+                            type="email"
+                        >
+                    </label>
+
+                    <label>
+                        Password
+                        <input
+                            autocomplete="current-password"
+                            name="password"
+                            required
+                            type="password"
+                        >
+                    </label>
+
+                    <button class="btn" type="submit">
+                        Sign in
+                    </button>
+
+                    <p class="small muted">
+                        New to MALI MODE? Create an account and verify your email first.
+                    </p>
+                </form>
+
+                <form class="form hidden" id="signup-form">
+                    <h2>Create your account</h2>
+
+                    <label>
+                        Full name
+                        <input
+                            autocomplete="name"
+                            minlength="2"
+                            name="full_name"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Email address
+                        <input
+                            autocomplete="email"
+                            name="email"
+                            required
+                            type="email"
+                        >
+                    </label>
+
+                    <label>
+                        Mobile number
+                        <input
+                            autocomplete="tel"
+                            minlength="7"
+                            name="phone"
+                            placeholder="e.g. 07x xxx xxxx"
+                            required
+                            type="tel"
+                        >
+                    </label>
+
+                    <label>
+                        Which account do you need?
+                        <select name="role" required>
+                            <option value="business_owner">
+                                I already run a business
+                            </option>
+                            <option value="new_entrepreneur">
+                                I want to start a business
+                            </option>
+                            <option value="supplier">
+                                I supply products to businesses
+                            </option>
+                            <option value="delivery_partner">
+                                I deliver orders
+                            </option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Password
+                        <input
+                            autocomplete="new-password"
+                            minlength="10"
+                            name="password"
+                            placeholder="At least 10 characters, letters and numbers"
+                            required
+                            type="password"
+                        >
+                    </label>
+
+                    <p class="small muted">
+                        Email verification is required before signing in. Each role has
+                        a different profile and dashboard.
+                    </p>
+
+                    <button class="btn" type="submit">
+                        Create account
+                    </button>
+                </form>
+
+                <div class="panel dev-preview" id="dev-preview-panel">
+                    <p class="eyebrow">
+                        DEVELOPER PREVIEW · NO DATABASE LOGIN
+                    </p>
+
+                    <h3>Preview a dashboard while building the frontend</h3>
+
+                    <p class="small muted">
+                        Choose one role here to preview its dashboard without creating
+                        an account. This preview is temporary and does not save data.
+                        It is a development tool, not real sign-in.
+                    </p>
+
+                    <label>
+                        Dashboard to preview
+                        <select id="preview-role">
+                            <option value="business_owner">Business owner</option>
+                            <option value="new_entrepreneur">New entrepreneur</option>
+                            <option value="supplier">Supplier</option>
+                            <option value="delivery_partner">Delivery partner</option>
+                        </select>
+                    </label>
+
+                    <button
+                        class="btn secondary"
+                        id="open-preview"
+                        type="button"
+                    >
+                        Open selected preview
+                    </button>
+                </div>
+
+                <div class="message hidden" id="auth-message" role="status"></div>
+            </div>
+        </section>
+
+        <section class="panel narrow hidden" id="verification-view">
+            <p class="eyebrow">ONE MORE STEP</p>
+
+            <h1>Verify your email</h1>
+
+            <p id="verify-copy">
+                We have created your account. Open the verification link sent to your
+                email, then return here to sign in.
+            </p>
+
+            <div class="notice">
+                If this is a local setup without SMTP, the verification link is printed
+                in the server terminal. That is for development only; configure an email
+                provider before public use.
+            </div>
+
+            <button class="btn secondary" id="back-signin" type="button">
+                Back to sign in
+            </button>
+        </section>
+
+        <section class="hidden" id="profile-view">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow" id="profile-eyebrow">PROFILE SETUP</p>
+
+                    <h1 id="profile-title">Complete your profile</h1>
+
+                    <p id="profile-subtitle">
+                        These details help MALI MODE tailor the right tools to you.
+                    </p>
+                </div>
+
+                <span class="step-pill" id="step-pill">
+                    Profile required
+                </span>
+            </div>
+
+            <div class="panel">
+                <div class="notice hidden" id="entrepreneur-intro">
+                    <strong>
+                        Your dashboard is locked until this step is complete.
+                    </strong>
+
+                    Answer the questions below so MALI MODE can prepare a useful business
+                    plan based on your real situation. You can review and correct the
+                    plan before using it.
+                </div>
+
+                <form class="form-grid" id="profile-form">
+                    <label>
+                        Full name
+                        <input name="full_name" required>
+                    </label>
+
+                    <label>
+                        Mobile number
+                        <input name="phone" required>
+                    </label>
+
+                    <label>
+                        Township / town / operating area
+                        <input
+                            name="location"
+                            placeholder="e.g. Roodepoort, Johannesburg"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Business or proposed business name
+                        <input name="business_name" required>
+                    </label>
+
+                    <label>
+                        Business type / sector
+                        <input
+                            name="business_type"
+                            placeholder="e.g. food, clothing, repairs"
+                            required
+                        >
+                    </label>
+
+                    <label class="wide">
+                        What will you sell or what service will you provide?
+                        <textarea name="product_service" required rows="2"></textarea>
+                    </label>
+
+                    <label class="wide entrepreneur-only">
+                        Who are your target customers?
+                        <textarea
+                            name="target_customers"
+                            placeholder="Be specific: nearby households, salons, spaza shops..."
+                            required
+                            rows="2"
+                        ></textarea>
+                    </label>
+
+                    <label class="wide entrepreneur-only">
+                        What customer need or problem will you solve?
+                        <textarea name="customer_problem" required rows="2"></textarea>
+                    </label>
+
+                    <label class="entrepreneur-only">
+                        Starting budget (rand)
+                        <input
+                            min="0"
+                            name="starting_budget"
+                            required
+                            step="0.01"
+                            type="number"
+                        >
+                    </label>
+
+                    <label class="entrepreneur-only">
+                        Planned selling price per unit (rand)
+                        <input
+                            min="0"
+                            name="selling_price"
+                            required
+                            step="0.01"
+                            type="number"
+                        >
+                    </label>
+
+                    <label class="entrepreneur-only">
+                        Cost to make/buy one unit (rand)
+                        <input
+                            min="0"
+                            name="unit_cost"
+                            required
+                            step="0.01"
+                            type="number"
+                        >
+                    </label>
+
+                    <label class="entrepreneur-only">
+                        Expected units sold per month
+                        <input
+                            min="0"
+                            name="expected_units_month"
+                            required
+                            step="1"
+                            type="number"
+                        >
+                    </label>
+
+                    <label class="entrepreneur-only">
+                        Monthly fixed costs (rand)
+                        <input
+                            min="0"
+                            name="monthly_fixed_costs"
+                            required
+                            step="0.01"
+                            type="number"
+                        >
+                    </label>
+
+                    <label class="entrepreneur-only">
+                        Funding you may need (rand)
+                        <input
+                            min="0"
+                            name="funding_needed"
+                            required
+                            step="0.01"
+                            type="number"
+                        >
+                    </label>
+
+                    <label class="wide entrepreneur-only">
+                        How will you reach customers?
+                        <textarea
+                            name="marketing_plan"
+                            placeholder="WhatsApp, local foot traffic, referrals, markets..."
+                            required
+                            rows="2"
+                        ></textarea>
+                    </label>
+
+                    <label class="wide entrepreneur-only">
+                        How will you operate and get supplies?
+                        <textarea name="operations" required rows="2"></textarea>
+                    </label>
+
+                    <label class="wide entrepreneur-only">
+                        What experience or skills do you already have?
+                        <textarea name="experience" required rows="2"></textarea>
+                    </label>
+
+                    <label class="entrepreneur-only">
+                        Registration status
+                        <select name="registration_status" required>
+                            <option value="Not registered">Not registered</option>
+                            <option value="In process">Registration in progress</option>
+                            <option value="Registered">Already registered</option>
+                            <option value="Not sure what is required">
+                                Not sure what is required
+                            </option>
+                        </select>
+                    </label>
+
+                    <label class="wide entrepreneur-only">
+                        Risks or challenges you expect
+                        <textarea name="risks" required rows="2"></textarea>
+                    </label>
+
+                    <label class="wide role-details-label hidden">
+                        Account-specific details
+                        <textarea
+                            name="role_details"
+                            rows="3"
+                            placeholder="Supplier: product range, pricing and delivery area. Delivery partner: transport type, service area and availability. Existing business: what you sell and how long you have traded."
+                        ></textarea>
+                    </label>
+
+                    <div class="wide form-actions">
+                        <button class="btn" type="submit" id="save-profile">
+                            Save profile and continue
+                        </button>
+
+                        <p class="small muted">
+                            Your answers are stored in the MALI MODE database. Do not
+                            enter passwords, bank PINs or other secrets.
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="hidden" id="plan-view">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow">YOUR BUSINESS PLAN</p>
+
+                    <h1>Review your plan before opening the dashboard</h1>
+
+                    <p>Generated from your profile and financial assumptions.</p>
+                </div>
+
+                <span class="step-pill">Review required</span>
+            </div>
+
+            <div class="panel" id="plan-content"></div>
+
+            <div class="button-row">
+                <button class="btn" id="download-plan" type="button">
+                    Download business plan PDF
+                </button>
+
+                <button class="btn secondary" id="unlock-dashboard" type="button">
+                    I've reviewed it — open my dashboard
+                </button>
+            </div>
+
+            <p class="small muted">
+                This plan is a working document, not an audited forecast or guarantee
+                of funding. Verify all numbers and tender requirements before sending it.
+            </p>
+        </section>
+
+        <section class="hidden" id="dashboard-view">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow">YOUR MALI MODE WORKSPACE</p>
+
+                    <h1 id="dashboard-title">Dashboard</h1>
+
+                    <p id="dashboard-subtitle">Your role-specific tools.</p>
+                </div>
+
+                <span class="step-pill" id="dashboard-role"></span>
+            </div>
+
+            <div class="dash-grid" id="dashboard-cards"></div>
+
+            <div class="panel hidden" id="transaction-workspace">
+                <h2>Record business activity</h2>
+
+                <p class="muted">
+                    Type or speak naturally. You can also scan a paper record or import
+                    a spreadsheet. Check every extracted detail before saving.
+                </p>
+
+                <div class="tabs tx-tabs">
+                    <button class="tab active" data-tx-tab="quick">
+                        Type or speak
+                    </button>
+
+                    <button class="tab" data-tx-tab="scan">
+                        Scan a paper record
+                    </button>
+
+                    <button class="tab" data-tx-tab="csv">
+                        Import a CSV
+                    </button>
+                </div>
+
+                <div class="tx-pane" id="tx-quick">
+                    <label>
+                        Describe what happened
+                        <textarea
+                            id="tx-natural-text"
+                            placeholder="I sold 5 bags of spinach for R150 cash yesterday."
+                            rows="3"
+                        ></textarea>
+                    </label>
+
+                    <div class="button-row tx-actions">
+                        <button
+                            class="btn secondary"
+                            id="tx-voice"
+                            type="button"
+                        >
+                            🎙 Speak instead
+                        </button>
+
+                        <button class="btn" id="tx-parse" type="button">
+                            Turn into transaction
+                        </button>
+                    </div>
+
+                    <p class="small muted" id="tx-voice-status">
+                        Voice uses your browser's speech recognition if available.
+                    </p>
+                </div>
+
+                <div class="tx-pane hidden" id="tx-scan">
+                    <p>
+                        Take a clear photo of a notebook page or receipt. The app extracts
+                        text so you do not have to retype everything.
+                    </p>
+
+                    <label>
+                        Choose a photo
+                        <input
+                            accept="image/png,image/jpeg,image/webp,image/tiff"
+                            id="tx-scan-file"
+                            type="file"
+                        >
+                    </label>
+
+                    <button class="btn" id="tx-scan-btn" type="button">
+                        Scan photo
+                    </button>
+
+                    <p class="small muted">
+                        Printed text works best; handwriting and totals can be misread.
+                        Scanning does not save anything automatically.
+                    </p>
+                </div>
+
+                <div class="tx-pane hidden" id="tx-csv">
+                    <p>
+                        If you already have records in Excel or another app, export them
+                        as CSV and import them in one go.
+                    </p>
+
+                    <label>
+                        Choose a CSV file
+                        <input
+                            accept=".csv,text/csv"
+                            id="tx-csv-file"
+                            type="file"
+                        >
+                    </label>
+
+                    <button class="btn" id="tx-csv-btn" type="button">
+                        Preview CSV import
+                    </button>
+
+                    <p class="small muted">
+                        Useful columns: Date, Type, Description or Item, Amount,
+                        Category, Quantity, Payment Method.
+                    </p>
+                </div>
+
+                <div class="message hidden" id="tx-message" role="status"></div>
+
+                <div class="hidden" id="tx-draft-area">
+                    <h3>Review transaction</h3>
+
+                    <p class="small muted">
+                        The app makes a best-effort guess. Correct all fields before saving.
+                    </p>
+
+                    <form class="form-grid" id="tx-review-form">
+                        <label>
+                            Date
+                            <input name="transaction_date" required type="date">
+                        </label>
+
+                        <label>
+                            Type
+                            <select name="transaction_type">
+                                <option>Sale</option>
+                                <option>Purchase</option>
+                                <option>Expense</option>
+                                <option>Refund</option>
+                            </select>
+                        </label>
+
+                        <label class="wide">
+                            Description
+                            <input maxlength="240" name="description" required>
+                        </label>
+
+                        <label>
+                            Category
+                            <select name="category">
+                                <option>Sales</option>
+                                <option>Stock</option>
+                                <option>Transport</option>
+                                <option>Rent</option>
+                                <option>Utilities</option>
+                                <option>Wages</option>
+                                <option>Other</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Amount (R)
+                            <input
+                                min="0.01"
+                                name="amount"
+                                required
+                                step="0.01"
+                                type="number"
+                            >
+                        </label>
+
+                        <label>
+                            Quantity
+                            <input
+                                min="0.01"
+                                name="quantity"
+                                required
+                                step="0.01"
+                                type="number"
+                                value="1"
+                            >
+                        </label>
+
+                        <label>
+                            Payment method
+                            <select name="payment_method">
+                                <option>Cash</option>
+                                <option>Card</option>
+                                <option>Bank Transfer</option>
+                                <option>E-wallet</option>
+                                <option>Credit</option>
+                                <option>Other</option>
+                            </select>
+                        </label>
+
+                        <div class="wide">
+                            <button class="btn" type="submit">
+                                Confirm and save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="hidden" id="tx-import-preview">
+                    <h3>CSV import preview</h3>
+
+                    <p id="tx-import-summary"></p>
+
+                    <div class="small" id="tx-import-errors"></div>
+
+                    <div class="tx-history" id="tx-import-table"></div>
+
+                    <div class="button-row">
+                        <button
+                            class="btn"
+                            id="tx-import-confirm"
+                            type="button"
+                        >
+                            Confirm import reviewed rows
+                        </button>
+
+                        <button
+                            class="btn secondary"
+                            id="tx-import-cancel"
+                            type="button"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="section-head">
+                    <div>
+                        <h3>Saved transaction history</h3>
+
+                        <p class="muted small">
+                            Only you can see the records saved to your account.
+                        </p>
+                    </div>
+
+                    <button class="btn secondary" id="tx-refresh" type="button">
+                        Refresh
+                    </button>
+                </div>
+
+                <div class="metric-row" id="tx-summary"></div>
+
+                <section class="insights-panel">
+                    <div class="section-head">
+                        <div>
+                            <h3>Business intelligence &amp; next steps</h3>
+
+                            <p class="small muted">
+                                Calculated from your saved transaction history. More
+                                complete records produce more useful insights.
+                            </p>
+                        </div>
+
+                        <button
+                            class="btn secondary"
+                            id="insights-refresh"
+                            type="button"
+                        >
+                            Refresh insights
+                        </button>
+                    </div>
+
+                    <div class="metric-row" id="insights-summary"></div>
+
+                    <div class="insights-list" id="insights-advice">
+                        <div class="empty">
+                            Record or import transactions to generate insights.
+                        </div>
+                    </div>
+
+                    <p class="small muted" id="insights-method"></p>
+                </section>
+
+                <div class="tx-history" id="tx-history"></div>
+            </div>
+
+            <div class="panel">
+                <h2>Your profile</h2>
+
+                <div id="profile-summary"></div>
+
+                <button class="btn secondary" id="edit-profile" type="button">
+                    Update profile
+                </button>
+            </div>
+
+            <div class="panel hidden" id="plan-dashboard-card">
+                <h2>Your business plan</h2>
+
+                <p>Your plan is ready to revisit or download.</p>
+
+                <button class="btn" id="download-plan-dashboard" type="button">
+                    Download plan PDF
+                </button>
+            </div>
+
+            <div class="panel">
+                <h2>Payments integration</h2>
+
+                <p>
+                    <strong>Status: Not connected yet.</strong>
+                    MALI MODE does not currently process real payments. No payment
+                    gateway credentials or sandbox checkout are configured, so do not
+                    treat payments as operational.
+                </p>
+
+                <p class="small muted">
+                    Before launch, choose a provider that supports your target market,
+                    implement its hosted checkout and verified webhook flow, and test
+                    in sandbox mode. Never store card numbers or CVVs in MALI MODE.
+                </p>
+            </div>
+
+            <div class="panel">
+                <h2>Formal markets and documentation</h2>
+
+                <p>
+                    Start with official sources and check each notice's eligibility,
+                    deadline and required documents.
+                </p>
+
+                <div class="link-list">
+                    <a
+                        href="https://www.etenders.gov.za/Home/"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        South African government eTenders ↗
+                    </a>
+
+                    <a
+                        href="https://secure.csd.gov.za/"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        Central Supplier Database (CSD) ↗
+                    </a>
+
+                    <a
+                        href="https://www.seda.org.za/"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        Small Enterprise Development Agency ↗
+                    </a>
+                </div>
+
+                <p class="small muted">
+                    These links are official starting points; MALI MODE does not yet
+                    automatically import live tender listings or submit applications.
+                </p>
+            </div>
+        </section>
+
+        <div class="message hidden" id="global-message" role="status"></div>
+    </main>
+
+    <footer>
+        © MALI MODE · Your hustle. Your next move.
+    </footer>
+
+    <script defer src="/static/app.js"></script>
+</body>
+</html>
