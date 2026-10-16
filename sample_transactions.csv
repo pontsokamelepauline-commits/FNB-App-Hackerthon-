@@ -1,0 +1,4 @@
+Date,Type,Description,Amount,Category,Quantity,Payment Method
+2026-10-10,Sale,Spinach bundles,150.00,Sales,5,Cash
+2026-10-11,Expense,Taxi to market,35.00,Transport,1,Cash
+2026-10-12,Purchase,Fresh produce stock,60.00,Stock,1,E-wallet
